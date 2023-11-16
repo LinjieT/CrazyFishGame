@@ -1,0 +1,23 @@
+
+module  user_top (  
+						input 	Clk,                // 50 MHz clock
+									Reset,              // Active-high reset signal
+                        	frame_clk,          // The clock indicating a new frame (~60Hz)
+						input user_exist,
+						input [9:0] user_sizeX,user_sizeY,
+						input [9:0]   	DrawX, DrawY,   // Current pixel coordinates
+						input [7:0]	  	keycode,			// keyboard press
+						output [7:0] 	read_address,
+						output 			is_user,  			// Whether current pixel belongs to user
+						//output 		user_on				//is user should be displayed
+						//inout [9:0] 	user_X, user_Y		// Current user coordinates
+              );
+		
+		//logic [9:0] user_X_Pos,user_Y_Pos;
+		user user1( .*, .Reset(Reset_h), .frame_clk(VGA_VS));//return next user position
+
+		user_RAM user_RAM1(.*);//display next user position
+		
+		
+		
+endmodule

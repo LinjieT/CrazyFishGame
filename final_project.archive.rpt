@@ -1,0 +1,109 @@
+Archive Project report for final_project
+Sun Dec 19 15:47:02 2021
+Quartus Prime Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Archive Project Summary
+  3. Archive Project Messages
+  4. Files Archived
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2018  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details.
+
+
+
++----------------------------------------------------------------+
+; Archive Project Summary                                        ;
++------------------------+---------------------------------------+
+; Archive Project Status ; Successful - Sun Dec 19 15:47:02 2021 ;
+; Revision Name          ; final_project                         ;
+; Top-level Entity Name  ; lab8                                  ;
+; Family                 ; Cyclone IV E                          ;
++------------------------+---------------------------------------+
+
+
++--------------------------+
+; Archive Project Messages ;
++--------------------------+
+Info: File Set 'Source control' contains:
+    Info: Project source and settings files
+    Info: Automatically detected source files
+Warning: Hierarchical Platform Designer systems and custom IP components(_hw.tcl and associated files) are not archived by the Quartus Archiver
+Critical Warning: Analysis & Elaboration was not run successfully.
+    Critical Warning: The 'Automatically detected source files' file subset will attempt to guess which files are needed. The archive file will likely be larger than required and may still be incomplete.
+Warning (225010): Analysis was not performed on the current project. The Quartus Prime software may not be able to automatically locate all project files.
+Info: Parsing: small_fish_display.sv
+Info: Parsing: small_fish.sv
+Info: Parsing: fish_display.sv
+Info: Parsing: fish.sv
+Info: Parsing: background.sv
+Info: Parsing: hpi_io_intf.sv
+Info: Parsing: VGA_controller.sv
+Info: Parsing: HexDriver.sv
+Info: Parsing: Color_Mapper.sv
+Info: Parsing: ball.sv
+Info: Archive will store files relative to the closest common parent directory
+Info (13213): Using common directory D:/jzy/code/FPGA/ECE385lab/final_project/
+Info: ----------------------------------------------------------
+Info: ----------------------------------------------------------
+Info: Generated archive 'D:/jzy/code/FPGA/ECE385lab/final_project/final_project.qar'
+Info: ----------------------------------------------------------
+Info: ----------------------------------------------------------
+Info: Generated report 'final_project.archive.rpt'
+Error (23031): Evaluation of Tcl script d:/software/quartus18.1/quartus/common/tcl/apps/qpm/qar.tcl unsuccessful
+Error: Quartus Prime Shell was unsuccessful. 4 errors, 10 warnings
+    Error: Peak virtual memory: 4826 megabytes
+    Error: Processing ended: Sun Dec 19 15:47:02 2021
+    Error: Elapsed time: 00:00:12
+    Error: Total CPU time (on all processors): 00:00:25
+
+
++---------------------------------------------------------------+
+; Files Archived                                                ;
++---------------------------------------------------------------+
+; File Name                                                     ;
++---------------------------------------------------------------+
+; background.sv                                                 ;
+; ball.sv                                                       ;
+; Color_Mapper.sv                                               ;
+; d:/software/quartus18.1/quartus/bin64/assignment_defaults.qdf ;
+; final_project.flow.rpt                                        ;
+; final_project.map.rpt                                         ;
+; final_project.map.smsg                                        ;
+; final_project.map.summary                                     ;
+; final_project.qpf                                             ;
+; final_project.qsf                                             ;
+; final_project.sv                                              ;
+; final_project_soc.qsys                                        ;
+; fish.sv                                                       ;
+; fish_display.sv                                               ;
+; HexDriver.sv                                                  ;
+; hpi_io_intf.sv                                                ;
+; PLLJ_PLLSPE_INFO.txt                                          ;
+; small_fish.sv                                                 ;
+; small_fish_display.sv                                         ;
+; vga_clk.v                                                     ;
+; VGA_controller.sv                                             ;
++---------------------------------------------------------------+
+
+

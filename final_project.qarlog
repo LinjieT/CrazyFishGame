@@ -1,0 +1,32 @@
+Quartus Prime Archive log --	D:/jzy/code/FPGA/ECE385lab/final_project/final_project.qarlog
+
+Archive:	D:/jzy/code/FPGA/ECE385lab/final_project/final_project.qar
+Date:		Sun Dec 19 15:47:02 2021
+Quartus Prime		18.1.0 Build 625 09/12/2018 SJ Lite Edition
+
+	=========== Files Selected: ===========
+D:/jzy/code/FPGA/ECE385lab/final_project/Color_Mapper.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/HexDriver.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/PLLJ_PLLSPE_INFO.txt
+D:/jzy/code/FPGA/ECE385lab/final_project/VGA_controller.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/background.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/ball.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.flow.rpt
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.map.rpt
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.map.smsg
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.map.summary
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.qpf
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.qsf
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/final_project_soc.qsys
+D:/jzy/code/FPGA/ECE385lab/final_project/fish.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/fish_display.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/hpi_io_intf.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/small_fish.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/small_fish_display.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/vga_clk.v
+d:/software/quartus18.1/quartus/bin64/assignment_defaults.qdf
+	======= Total: 21 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.

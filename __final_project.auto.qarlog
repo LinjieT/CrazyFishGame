@@ -1,0 +1,34 @@
+Quartus Prime Archive log --	D:/jzy/code/FPGA/ECE385lab/final_project/__final_project.auto.qarlog
+
+Archive:	D:/jzy/code/FPGA/ECE385lab/final_project/__final_project.auto.qar
+Date:		Sun Dec 19 15:47:02 2021
+Quartus Prime		18.1.0 Build 625 09/12/2018 SJ Lite Edition
+
+	=========== Files Selected: ===========
+Color_Mapper.sv
+D:/jzy/code/FPGA/ECE385lab/final_project/db/final_project.cbx.xml
+D:/jzy/code/FPGA/ECE385lab/final_project/db/final_project.qpf
+HexDriver.sv
+PLLJ_PLLSPE_INFO.txt
+VGA_controller.sv
+background.sv
+ball.sv
+d:/software/quartus18.1/quartus/bin64/assignment_defaults.qdf
+final_project.flow.rpt
+final_project.map.rpt
+final_project.map.smsg
+final_project.map.summary
+final_project.qsf
+final_project.sv
+final_project_soc.qsys
+fish.sv
+fish_display.sv
+hpi_io_intf.sv
+small_fish.sv
+small_fish_display.sv
+vga_clk.v
+新建文本文档.txt
+	======= Total: 23 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.

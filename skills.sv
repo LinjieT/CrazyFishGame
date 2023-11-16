@@ -1,0 +1,7 @@
+module protect(
+				
+
+				);
+				
+				
+endmodule

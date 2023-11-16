@@ -1,0 +1,54 @@
+/*
+ * ECE385-HelperTools/PNG-To-Txt
+ * Author: Rishi Thakkar
+ *
+ */
+module background (
+	input Clk, 
+	input background_exist,
+	input		[9:0] DrawX, DrawY,
+	output 	[3:0] background_address,
+	output 			is_background
+);
+	// screen size
+	parameter [9:0] SCREEN_WIDTH =  10'd480;
+   parameter [9:0] SCREEN_LENGTH = 10'd640;
+	parameter  scale =  10'd1;
+	parameter [9:0] RESHAPE_LENGTH = SCREEN_LENGTH/scale;
+
+	logic [18:0] read_address;
+	
+	assign read_address = DrawX/scale + DrawY/scale*RESHAPE_LENGTH;//row, col, 4 pixel 1 color
+	background_RAM background_RAM(.*);
+
+
+	always_comb begin
+		is_background = 1'b0;
+		if (background_exist == 1'b1)
+			is_background = 1'b1;
+	end
+
+endmodule
+
+module  background_RAM
+(
+		input [18:0] read_address,
+		input Clk,
+
+		output [3:0] background_address
+);
+
+// mem has width of 4 bits and a total of 307200 addresses
+//logic [3:0] mem [0:307199];
+logic [3:0] background_mem [0:76799];
+initial
+begin
+	 $readmemh("picture/bg.txt", background_mem);
+end
+
+
+always_ff @ (posedge Clk) begin
+	background_address<= background_mem[read_address];
+end
+
+endmodule

@@ -1,0 +1,111 @@
+//-------------------------------------------------------------------------
+//    Color_Mapper.sv                                                    --
+//    Stephen Kempf                                                      --
+//    3-1-06                                                             --
+//                                                                       --
+//    Modified by David Kesler  07-16-2008                               --
+//    Translated by Joe Meng    07-07-2013                               --
+//    Modified by Po-Han Huang  10-06-2017                               --
+//                                                                       --
+//    Fall 2017 Distribution                                             --
+//                                                                       --
+//    For use with ECE 385 Lab 8                                         --
+//    University of Illinois ECE Department                              --
+//-------------------------------------------------------------------------
+
+// color_mapper: Decide which color to be output to VGA for each pixel.
+
+module  color_mapper (  input is_background,
+								input [3:0] background_address,
+								
+								input is_fish,
+								input [3:0] fish_address,
+								
+								input is_small_fish,
+								input [3:0] small_fish_address,
+								
+								//input [23:0] BG_RGB,
+								//input 		is_ball,            // Whether current pixel belongs to ball 
+                                                              //   or background (computed in ball.sv)
+								input  [9:0] DrawX, DrawY,       // Current pixel coordinates
+								output [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
+                     );
+    
+   logic [7:0] Red, Green, Blue;
+	
+	 
+   // Output colors to VGA
+   assign VGA_R = Red;
+   assign VGA_G = Green;
+   assign VGA_B = Blue;
+    
+	 
+	//BG
+	logic [23:0] BG_color[15:0];
+	logic [23:0] BG_display;
+	assign BG_color= '{24'h325086,24'h665657,24'h22273A,24'h32425C,
+							24'h3A4D5C,24'h2F2C3F,24'h5477AD,24'h407AB9,
+							24'h5B9AD0,24'h386DAF,24'h1F2130,24'h8B8086,
+							24'h508DC4,24'h3475B7,24'h6888B9,24'h202133};
+	assign BG_display=BG_color[background_address];
+	 
+	 
+	 //fish
+	logic [23:0] fish_color[15:0];//16 color
+	logic [23:0] fish_display;
+	assign fish_color='{	24'hFFFFFF,24'h060303,24'hE89DA1,24'h6BADD7,
+								24'h8A9A91,24'hC0B1A2,24'hFCE3C4,24'hF6D0BC,
+								24'hF7DFC5,24'hF7DEB8,24'hA9C7C6,24'h60A5D8,
+								24'h67AAD5,24'hC8D6D9,24'hF1E0C6,24'hE7ACA5};
+	assign fish_display=fish_color[fish_address];							
+								
+	
+	//small_fish
+	logic [23:0] small_fish_color[4:0];//16 color
+	logic [23:0] small_fish_display;
+	assign small_fish_color='{24'hFFFFFF,24'h000000,24'hFF0000,24'h0000FF,24'h00FFFF};
+							
+	assign small_fish_display=small_fish_color[small_fish_address];
+	 
+   // Assign color based on is_ball signal
+   always_comb
+   begin
+//		if (is_ball == 1'b1) 
+//		begin
+//           // White ball
+//         Red = 8'hff;
+//         Green = 8'hff;
+//         Blue = 8'hff;
+//		end
+		
+		if (is_fish == 1'b1 && fish_address != 0)//not white
+		begin
+			Red = fish_display[23:16];
+         Green = fish_display[15:8];
+         Blue = fish_display[7:0];
+		end
+		
+		else if (is_small_fish == 1'b1 && small_fish_address != 0)//not white
+		begin
+			Red = small_fish_display[23:16];
+         Green = small_fish_display[15:8];
+         Blue = small_fish_display[7:0];
+		end
+		//object above the background
+		else if (is_background == 1'b1 )
+		begin
+			Red = BG_display[23:16];
+         Green = BG_display[15:8];
+         Blue = BG_display[7:0];
+		end
+		
+		else 
+		begin
+          // default Background with nice color gradient
+         Red = 8'h3f; 
+         Green = 8'h00;
+         Blue = 8'h7f - {1'b0, DrawX[9:3]};
+      end
+    end 
+    
+endmodule

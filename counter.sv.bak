@@ -1,0 +1,28 @@
+//count time is real world
+
+module timecounter (
+input logic Reset,
+input logic Clk,
+input logic time_reset, //if 
+output logic  t, gameover);
+
+logic [31:0] counter;//32 bit time counter
+logic t_temp, gameover_temp;
+//logic timeaddingfirst;
+
+always_ff @ (posedge Clk)
+begin
+	if (Reset || time_reset) begin
+		t <= 1'b0;
+		gameover <= 1'b0;
+		counter <= 33'b0;
+	end
+	else begin
+		t <= t_temp;
+		gameover <= gameover_temp;
+		if (~t)
+			counter <= counter + 1;
+	end
+end
+
+endmodule

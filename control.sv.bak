@@ -1,0 +1,140 @@
+//control state machine
+//state 
+//0 : start new game
+//1 : normal motion
+	// 1 left or right
+	// 2 left or right
+	// fish left or right
+	// posture
+//2 : 1 eat small fish -> fish1_exist
+//3 : 2 eat small fish -> fish2_exist
+//4 : 1 die -> user1_exist
+//5 : 2 die -> user2_exist
+//6 : check any fish left
+//7 : check score who win?
+//8 : display score
+//9 : another game or shutdown
+
+
+
+module control ( 
+					input  clk,
+					input  reset,
+					
+					//we can not tell which one is the user1
+					input  [7:0]keycode,	//user1 or user2 
+					input  [7:0]keycode_0,	//user2 or user1
+
+					input  user1_exist,		//user1_exist==0 means user1 died
+					input  user2_exist,		//user2_exist==0 means user2 died
+					input  fish1_exist,		//fish1_exist==0 means fish1 died
+
+					input  n_fish,	//if all small fish eaten, game over, count the point of the two players 
+					
+					//output isPre,
+					//output [1:0] level,		//normal
+					output resetAll,   		//reset the game
+					output [1:0] cur_state,
+					//output [4:0] displaylevel   //
+
+               );
+			
+    parameter [7:0] codeEnter= 8'h28;//"ENTER"
+	enum logic [1:0] {NEWGAME, INIT, NORMAL, GAMEOVER} state, next_state;//states
+	logic gameover_reset;
+
+	assign cur_state = state;
+	
+	//output the current state
+	//indicate the graph to be displayed
+
+	//reset
+	always_ff @ (posedge clk or posedge reset) begin
+		if (reset) begin
+			state <= NEWGAME;//new game, show the picture the first state
+			resetAll <= 1'b1;
+		end else begin
+			state <= next_state;
+			resetAll <= gameover_reset;//is gameover
+			counter 
+		end
+	end
+	
+	//state machine
+	always_comb begin
+		//default case
+		next_state = state;
+		gameover_reset = resetAll;
+		
+		//if any of the users died, gameover, check the score
+		if( user1_exist == 0 )
+		begin
+			next_state = GAMEOVER;
+			gameover_reset = 1'b1;
+		end
+
+		else if( user2_exist == 0 )
+		begin
+			next_state = GAMEOVER;
+			gameover_reset = 1'b1;
+		end	
+
+		else if( n_fish == 0)
+		begin
+			next_state = GAMEOVER;
+			gameover_reset = 1'b1;
+		end
+
+		//state machine
+		else begin
+			case (state)
+			
+			//dicide whether to start a new game, press "ENTER"
+			NEWGAME : begin
+				gameover_reset = 1'b0;
+				if( keycode == codeEnter || keycode_0 == codeEnter ) //if press enter start game
+					next_state = INIT;//game start
+				else 
+					next_state = NEWGAME;//else keep waiting for the user
+			end
+
+			//initial game, determine the distribution of fish
+			//in this state, all fish are protected in order to avoid incorrect cases
+			INIT : begin
+				gameover_reset = 1'b0;
+				if( keycode == codeEnter || keycode_0 == codeEnter ) //if press enter start game
+					next_state = NORMAL;//game start
+				else 
+					next_state = INIT;//else keep waiting for the user
+			end
+
+			NORMAL : begin
+				if(n_fish==0)
+				begin
+					next_state = GAMEOVER ;
+					gameover_reset = 1'b1;
+				end
+				else begin //if no fish left, gameover, not 0
+					next_state = NORMAL;
+					gameover_reset = 1'b0;
+				end
+			end
+
+			//game over, show the result of the game: 
+			//1. the score
+			//2. who win?
+			GAMEOVER : begin
+				gameover_reset = 1'b0;
+				if( keycode == codeEnter || keycode_0 == codeEnter ) //if press enter start a new game
+					next_state = NEWGAME;
+				else 
+					next_state = GAMEOVER;//else keep waiting for the user
+			end
+
+			endcase
+		end
+		
+	end
+
+
+endmodule

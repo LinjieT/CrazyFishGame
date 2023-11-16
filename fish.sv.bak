@@ -1,0 +1,189 @@
+
+
+module  fish (  	input Clk,                // 50 MHz clock
+                        Reset,              // Active-high reset signal
+                        frame_clk,          // The clock indicating a new frame (~60Hz)
+						input fish_exist,
+						input [9:0] FISH_sizeX,FISH_sizeY,
+						input [9:0]   DrawX, DrawY,       // Current pixel coordinates
+						input [7:0]	  keycode,				 // keyboard press
+						output is_fish,          // check if fish 
+						output [18:0] read_address,
+						output [3:0] fish_address
+              );
+    
+    parameter [9:0] fish_X_Center = 10'd320;  // Center position on the X axis
+    parameter [9:0] fish_Y_Center = 10'd240;  // Center position on the Y axis
+    parameter [9:0] fish_X_Min = 10'd0;       // Leftmost point on the X axis
+    parameter [9:0] fish_X_Max = 10'd639;     // Rightmost point on the X axis
+    parameter [9:0] fish_Y_Min = 10'd0;       // Topmost point on the Y axis
+    parameter [9:0] fish_Y_Max = 10'd479;     // Bottommost point on the Y axis
+	 
+    parameter [9:0] fish_X_Step = 10'd2;      // Step size on the X axis
+    parameter [9:0] fish_Y_Step = 10'd2;      // Step size on the Y axis
+    //parameter [9:0] fish_Size = 10'd4;      // fish size
+    
+	 logic [9:0] fish_X_Pos,fish_Y_Pos;
+    logic [9:0] fish_X_Motion, fish_Y_Motion;
+    logic [9:0] fish_X_Pos_in, fish_X_Motion_in, fish_Y_Pos_in, fish_Y_Motion_in;
+    
+    //////// Do not modify the always_ff blocks. ////////
+    // Detect rising edge of frame_clk
+    logic frame_clk_delayed, frame_clk_rising_edge;
+    always_ff @ (posedge Clk) begin
+        frame_clk_delayed <= frame_clk;
+        frame_clk_rising_edge <= (frame_clk == 1'b1) && (frame_clk_delayed == 1'b0);
+    end
+    // Update registers
+    always_ff @ (posedge Clk)
+    begin
+        if (Reset)
+        begin
+            fish_X_Pos <= fish_X_Center;
+            fish_Y_Pos <= fish_Y_Center;
+            fish_X_Motion <= 10'd0;
+            fish_Y_Motion <= fish_Y_Step;
+        end
+        else
+        begin
+            fish_X_Pos <= fish_X_Pos_in;
+            fish_Y_Pos <= fish_Y_Pos_in;
+            fish_X_Motion <= fish_X_Motion_in;
+            fish_Y_Motion <= fish_Y_Motion_in;
+        end
+    end
+    //////// Do not modify the always_ff blocks. ////////
+    
+    // You need to modify always_comb block.
+    always_comb
+    begin
+        // By default, keep motion and position unchanged
+        fish_X_Pos_in = fish_X_Pos;
+        fish_Y_Pos_in = fish_Y_Pos;
+        fish_X_Motion_in = fish_X_Motion;
+        fish_Y_Motion_in = fish_Y_Motion;
+        // Update position and motion only at rising edge of frame clock
+        if (frame_clk_rising_edge)
+        begin
+//                //the fish is allowed to move in both direction
+//            if (keycode==8'h80)//left
+//            begin
+//					fish_X_Motion_in = (~(fish_X_Step) + 1'b1);
+//					fish_Y_Motion_in = 10'h000;
+//				end
+//            if (keycode==8'h79)//right
+//            begin
+//					fish_X_Motion_in = fish_X_Step;
+//					fish_Y_Motion_in = 10'h000;
+//				end
+//            if (keycode== 8'h82)//up
+//            begin        
+//					fish_X_Motion_in = 10'h000;
+//					fish_Y_Motion_in = (~(fish_Y_Step) + 1'b1);
+//				end
+//            if (keycode== 8'h81)//down
+//				begin
+//					fish_X_Motion_in = 10'h000;
+//					fish_Y_Motion_in = fish_Y_Step;
+//				end
+
+				    //the fish is allowed to move in both direction
+//            if (keycode==8'h04)//left
+//            begin
+//					fish_X_Motion_in = (~(fish_X_Step) + 1'b1);
+//					fish_Y_Motion_in = 10'h000;
+//				end
+//            if (keycode==8'h07)//right
+//            begin
+//					fish_X_Motion_in = fish_X_Step;
+//					fish_Y_Motion_in = 10'h000;
+//				end
+//            if (keycode== 8'h1a)//up
+//            begin        
+//					fish_X_Motion_in = 10'h000;
+//					fish_Y_Motion_in = (~(fish_Y_Step) + 1'b1);
+//				end
+//            if (keycode== 8'h16)//down
+//				begin
+//					fish_X_Motion_in = 10'h000;
+//					fish_Y_Motion_in = fish_Y_Step;
+//				end
+
+				case(keycode)
+				 	// key A, clear y directional motion and moving left
+				 	8'h04: begin
+				 				fish_X_Motion_in = (~(fish_X_Step) + 1'b1);
+				 				fish_Y_Motion_in = 10'h000;
+				 			end
+							
+				 	// key D, clear y directional motion and moving right
+				 	8'h07: begin
+				 				fish_X_Motion_in = fish_X_Step;
+				 				fish_Y_Motion_in = 10'h000;
+				 			end
+					
+				 	// key W, clear x directional motion and moving up
+				 	8'h1a: begin
+				 				fish_X_Motion_in = 10'h000;
+				 				fish_Y_Motion_in = (~(fish_Y_Step) + 1'b1);
+				 			end
+					
+				 	// key S, clear x directional motion and moving down
+				 	8'h16: begin
+				 				fish_X_Motion_in = 10'h000;
+				 				fish_Y_Motion_in = fish_Y_Step;
+				 			end
+							
+				 	// default does nothing
+				 	default:
+				 		begin
+				 		end
+				endcase
+				
+            // Be careful when using comparators with "logic" datatype because compiler treats 
+            //   both sides of the operator as UNSIGNED numbers.
+            // e.g. fish_Y_Pos - fish_Size <= fish_Y_Min 
+            // If fish_Y_Pos is 0, then fish_Y_Pos - fish_Size will not be -4, but rather a large positive number.
+            if( fish_Y_Pos + FISH_sizeY >= fish_Y_Max )  // fish is at the bottom edge, BOUNCE!
+                fish_Y_Motion_in = (~(fish_Y_Step) + 1'b1);  // 2's complement.  
+            else if ( fish_Y_Pos <= fish_Y_Min + FISH_sizeY )  // fish is at the top edge, BOUNCE!
+                fish_Y_Motion_in = fish_Y_Step;
+					 
+            // TODO: Add other boundary detections and handle keypress here.
+        
+            if( fish_X_Pos + FISH_sizeX >= fish_X_Max )  // fish is at the right edge, BOUNCE!
+                fish_X_Motion_in = (~(fish_X_Step) + 1'b1);  // 2's complement.  
+            else if ( fish_X_Pos <= fish_X_Min + FISH_sizeX )  // fish is at the left edge, BOUNCE!
+                fish_X_Motion_in = fish_X_Step;
+					 
+            // Update the fish's position with its motion
+            fish_X_Pos_in = fish_X_Pos + fish_X_Motion_in;
+            fish_Y_Pos_in = fish_Y_Pos + fish_Y_Motion_in;
+        end
+        
+    end
+    
+
+	 
+		logic	[9:0] 	left, up;
+		logic	[9:0] 	tempX, tempY;
+		//logic				fish_on;
+		always_comb
+		begin
+			left	= fish_X_Pos - FISH_sizeX/2;
+			up		= fish_Y_Pos - FISH_sizeY/2;
+			tempX	=	DrawX - left;
+			tempY	=	DrawY - up;
+			if (tempX >= 0 && tempX < FISH_sizeX && tempY >= 0 && tempY < FISH_sizeY && fish_exist == 1'b1) 
+				is_fish = 1'b1;
+			else 
+				is_fish = 1'b0;
+			if(is_fish == 1'b1)
+				read_address	=	tempY * FISH_sizeX + tempX + 1;
+			else
+				read_address	=	19'd0;//FFFFFF, white
+		end
+		
+		fish_RAM fish_RAM_inst(.*);
+ 
+endmodule

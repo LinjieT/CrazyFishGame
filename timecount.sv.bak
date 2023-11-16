@@ -1,0 +1,270 @@
+module timecount (
+input logic Reset,
+input logic Clk,
+input logic timeadding_on,
+output logic t0, t1, t2, t3, t4, t5, gg1);
+
+logic [32:0] counttime;
+logic t0_temp, t1_temp, t2_temp, t3_temp, t4_temp, t5_temp, gg1_temp;
+//logic timeaddingfirst;
+
+always_ff @ (posedge Clk)
+begin
+   if (Reset) begin
+	   t0 <= 1'b0;
+		t1 <= 1'b0;
+		t2 <= 1'b0;
+		t3 <= 1'b0;
+		t4 <= 1'b0;
+		t5 <= 1'b0;
+		gg1 <= 1'b0;
+		counttime <= 33'b0;
+//		timeaddingfirst <= 1'b0;
+		end
+	else begin
+	   t0 <= t0_temp;
+		t1 <= t1_temp;
+		t2 <= t2_temp;
+		t3 <= t3_temp;
+		t4 <= t4_temp;
+		t5 <= t5_temp;
+		gg1 <= gg1_temp;
+		
+//		if (timeadding_on && (counttime > 2**30))
+//		begin
+//		counttime <= counttime - 2**30;
+//		timeaddingfirst <= 1'b1;
+//		end
+		if (~t5)
+		begin
+		counttime <= counttime + 1;
+		end
+		end
+end
+
+always_comb
+begin
+   if (counttime <= 2**29)
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b1;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	else
+	begin
+	t0_temp = 1'b1;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else if ((counttime > 2**29) && (counttime <= 2*2**29))
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b1;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	else
+	begin
+	t0_temp = 1'b1;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else if ((counttime > 2*2**29) && (counttime <= 3*2**29))
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b1;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	else
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b1;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else if ((counttime > 3*2**29) && (counttime <= 4*2**29))
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b1;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	else
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b1;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else if ((counttime > 4*2**29) && (counttime <= 5*2**29))
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b1;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	else
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b1;
+	t4_temp = 1'b0;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else if ((counttime > 5*2**29) && (counttime <= 6*2**29))
+	begin
+	if (~timeadding_on)
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b1;
+	gg1_temp = 1'b1;
+	end
+	else
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b1;
+	t5_temp = 1'b0;
+	gg1_temp = 1'b0;
+	end
+	end
+	
+	else
+	begin
+	t0_temp = 1'b0;
+	t1_temp = 1'b0;
+	t2_temp = 1'b0;
+	t3_temp = 1'b0;
+	t4_temp = 1'b0;
+	t5_temp = 1'b1;
+	gg1_temp = 1'b1;
+	end
+end
+endmodule
+	
+//module magnetbean (     
+//
+//input logic Reset,
+//input logic Clk,
+//input logic [9:0] magnetX,
+//input logic [9:0] magnetY,
+//input logic [9:0] pacX,
+//input logic [9:0] pacY,
+//output logic show,
+//output logic magnet_on
+//                  											  );
+//		
+//	
+//logic [27:0] counttime;
+//logic con_temp;
+//logic con;
+//logic show_temp;
+//
+//  always_ff @ (posedge Clk)
+//	begin
+//		if (Reset) begin
+//			show <= 1'b1;
+//			magnet_on <= 1'b0;
+//			counttime <= 28'b0;
+//			con <= 1'b0;
+//			
+//		end
+//		
+//		else begin
+//			show <= show_temp;
+//			con <= con_temp;
+//			if (con) begin
+//			   counttime <= counttime + 1;
+//				magnet_on <= 1'b1;
+//			end
+//			else begin
+//			   magnet_on <= 1'b0;
+//			
+//		   end
+//		end
+//	end
+// 
+//  always_comb 
+//	begin
+//	if ((magnetX >= pacX - 6) && (magnetX <= pacX + 6) && (magnetY >= pacY - 6) && (magnetY <= pacY + 6) && show == 1'b1) 
+//		begin
+//			show_temp = 1'b0;	//if collision with pacman dont show
+//			con_temp = 1'b1;
+//		end
+//		else if (counttime == 2**28 - 1) begin
+//		   show_temp = 1'b0;
+//		   con_temp = 1'b0;
+//		end	
+//		else begin
+//		   show_temp = show;
+//			con_temp = con;
+//		end 
+//
+//	end
+//
+//endmodule
+
+
+
+
+
+

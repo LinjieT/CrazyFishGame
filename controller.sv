@@ -1,0 +1,157 @@
+module controller (
+	input Clk, 
+	input Reset,
+	input		[9:0] DrawX, DrawY,
+	input [7:0]	  keycode,keycode_0,
+	input    user1_exist,user2_exist,
+	input [7:0]   score1,score2,
+	output 	start_address,user1win_address,user2win_address,
+	output 	is_start,is_user1win,is_user2win
+	
+);
+	// screen size
+	parameter [9:0] SCREEN_WIDTH =  10'd480;
+   parameter [9:0] SCREEN_LENGTH = 10'd640;
+	parameter  scale =  10'd2;
+	parameter [9:0] RESHAPE_LENGTH = SCREEN_LENGTH/scale;
+
+	logic [18:0] read_address;
+	
+	assign read_address = DrawX/scale + DrawY/scale*RESHAPE_LENGTH;//row, col, 4 pixel 1 color
+	
+	//assign read_address = DrawX + DrawY*SCREEN_LENGTH;//SCREEN_LENGTH
+	start_RAM start_RAM_inst(.*);
+	user1win_RAM user1win_RAM_inst(.*);
+	user2win_RAM user2win_RAM_inst(.*);
+	
+	logic is_start_in,is_user1win_in,is_user2win_in;
+	
+ always_ff @ (posedge Clk)
+    begin
+        if (Reset)
+        begin
+            is_start=0;
+				is_user1win=0;
+				is_user2win=0;
+        end
+        else
+        begin
+            is_start=is_start_in;
+				is_user1win=is_user1win_in;
+				is_user2win=is_user2win_in;
+        end
+    end
+	 
+	 
+	always_comb begin
+		if((keycode==8'h28)||(keycode_0==8'h28))
+		begin
+			is_start_in=1;
+		end
+		else
+		begin
+			is_start_in=is_start;
+		end
+		
+		if ((user1_exist==1)&&(is_user1win==0)&&(is_user2win==0))
+		begin
+			is_user2win_in=1;
+			is_user1win_in=is_user1win;
+		end
+		else if( (user2_exist==1) && (is_user2win==0) && (is_user1win==0) )
+		begin
+			is_user1win_in=1;
+			is_user2win_in=is_user2win;
+		end
+		else if( score1+score2==8'd9)
+		begin
+			if(score1>score2)
+			begin
+				is_user1win_in=1;
+				is_user2win_in=is_user2win;	
+			end
+			else
+			begin
+				is_user2win_in=1;
+				is_user1win_in=is_user1win;
+			end
+		end
+		else
+		begin
+			is_user2win_in=is_user2win;
+			is_user1win_in=is_user1win;
+		end
+		
+		
+	end
+
+endmodule
+
+module start_RAM
+(
+		input [18:0] read_address,
+		input Clk,
+
+		output start_address
+);
+
+// mem has width of 4 bits and a total of 307200 addresses
+//logic [3:0] mem [0:307199];
+logic [3:0] mem [0:76799];
+initial
+begin
+	 $readmemh("picture/start.txt", mem);
+end
+
+
+always_ff @ (posedge Clk) begin
+	start_address<= mem[read_address];
+end
+
+endmodule
+
+module user1win_RAM
+(
+		input [18:0] read_address,
+		input Clk,
+
+		output user1win_address
+);
+
+// mem has width of 4 bits and a total of 307200 addresses
+//logic [3:0] mem [0:307199];
+logic [3:0] mem [0:76799];
+initial
+begin
+	 $readmemh("picture/player1win.txt", mem);
+end
+
+
+always_ff @ (posedge Clk) begin
+	user1win_address<= mem[read_address];
+end
+
+endmodule
+
+module user2win_RAM
+(
+		input [18:0] read_address,
+		input Clk,
+
+		output user2win_address
+);
+
+// mem has width of 4 bits and a total of 307200 addresses
+//logic [3:0] mem [0:307199];
+logic [3:0] mem [0:76799];
+initial
+begin
+	 $readmemh("picture/player2win.txt", mem);
+end
+
+
+always_ff @ (posedge Clk) begin
+	user2win_address<= mem[read_address];
+end
+
+endmodule

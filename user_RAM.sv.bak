@@ -1,0 +1,23 @@
+
+
+module  user_RAM
+(
+		input [18:0] read_address,
+		input Clk,
+		output logic [3:0] user_address
+);
+
+// mem has width of 4 bits and a total of 307200 addresses
+//logic [3:0] mem [0:307199];
+logic [3:0] mem [0:3071];
+initial
+begin
+	 $readmemh("picture/blue_left.txt", mem);
+end
+
+
+always_ff @ (posedge Clk) begin
+	user1_address<= mem[read_address];
+end
+
+endmodule
